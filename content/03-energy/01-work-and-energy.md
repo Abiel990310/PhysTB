@@ -162,6 +162,10 @@ where the particle momentarily stops and reverses.
 }
 :::
 
+## Practice
+
+:::exercise energy-symbolic
+
 :::recap
 - $W = \int \vec F\cdot d\vec x$. Constant force gives $Fd$ as a special case;
   a spring gives $\tfrac12 kx^2$.

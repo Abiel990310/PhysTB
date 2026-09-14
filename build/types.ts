@@ -75,6 +75,24 @@ export interface Part {
   readonly chapters: readonly Chapter[];
 }
 
+/**
+ * One part of a practice problem: a question with a checkable answer.
+ *
+ * `accept` and `reject` are not decoration. They are the problem's own test
+ * suite, run against the grader by `verify:problems`, and `reject` may not be
+ * empty — a problem whose grader accepts everything is not a problem.
+ */
+export interface AnswerPart {
+  readonly prompt: string;
+  readonly reference: string;
+  readonly mode: 'expression' | 'antiderivative';
+  readonly variable: string;
+  /** Variables the problem declares positive: masses, lengths, spring constants. */
+  readonly positive: string;
+  readonly accept: readonly string[];
+  readonly reject: readonly string[];
+}
+
 /** A practice problem from content/exercises/. */
 export interface Exercise {
   readonly id: string;
@@ -83,25 +101,14 @@ export interface Exercise {
   /** Chapter slug this problem belongs to, if any. */
   readonly chapter: string;
   readonly topics: readonly string[];
-  readonly standard: string;
-  readonly check: CheckMode;
-  /** Text piped to the program's stdin, for `output` problems that read input. */
-  readonly stdin: string;
-  /**
-   * Judge cases, for `output` problems that declare a `## Cases` section.
-   * Empty for every other problem, in which case `stdin`/`tests` are used.
-   */
-  readonly cases: readonly JudgeCase[];
-  /** Wall-clock budget per case, in milliseconds. 0 means the server default. */
-  readonly timeLimitMs: number;
+  /** `mech`, `em` or `both`, matching the chapter scope tags. */
+  readonly scope: string;
   /** Prompt, rendered from Markdown. */
   readonly promptHtml: string;
-  readonly starter: string;
-  /** Appended to the reader's submission; should assert on behaviour. */
-  readonly tests: string;
+  readonly parts: readonly AnswerPart[];
   /** Progressive hints, rendered from Markdown. */
   readonly hints: readonly string[];
-  readonly solution: string;
+  /** Worked solutions, shown once the reader has answered or given up. */
   readonly solutionNotesHtml: string;
 }
 

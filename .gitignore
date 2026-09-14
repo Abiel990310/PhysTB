@@ -4,3 +4,7 @@ dist/
 *.log
 .DS_Store
 shot*.tmp.mjs
+
+# Python bytecode from the verifier scripts.
+__pycache__/
+*.pyc

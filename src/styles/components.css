@@ -551,3 +551,105 @@ tb-runner pre.shiki { border: 0; border-radius: 0; background: var(--bg-code) !i
 .search__snippet { display: block; font-size: 0.78rem; color: var(--ink-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .search__empty { padding: 1rem; font-size: var(--step--1); color: var(--ink-faint); font-family: var(--font-ui); }
 .search__hint { margin: 0; padding: 0.5rem 1rem; border-top: 1px solid var(--line); font-size: 0.7rem; color: var(--ink-faint); font-family: var(--font-ui); display: flex; gap: 0.3rem; align-items: center; }
+
+/* ---- answer problems -------------------------------------------------- */
+/* The runner styles above came across with the engine and describe a code
+   editor. This book's problems are answer boxes, so the parts below are what
+   actually renders; the block above stays only for the shell around them. */
+
+.exercise__head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+.exercise__tag {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+a.exercise__title { font-family: var(--font-prose); font-size: var(--step-0); font-weight: 600; color: var(--ink); text-decoration: none; }
+a.exercise__title:hover { color: var(--accent); }
+
+.exercise__prompt { padding: 1rem 1.2rem 0; }
+
+.exercise__parts { margin: 0; padding: 0.4rem 1.2rem 0.2rem 2.6rem; }
+.part { margin: 0 0 1.1rem; }
+.part__prompt {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ink);
+}
+.part__row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.part__input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: 0.42rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.part__input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.part__check {
+  padding: 0.42rem 0.95rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.part__check:hover { filter: brightness(1.08); }
+
+.part__verdict {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  line-height: 1.45;
+}
+.part__verdict.is-right { color: var(--pass); }
+.part__verdict.is-wrong { color: var(--fail); }
+
+.part.is-right .part__input { border-color: var(--pass); }
+/* A tick for work done in an earlier visit, distinct from a fresh pass. */
+.part.was-right .part__prompt::after { content: " ✓"; color: var(--pass); }
+
+.exercise__progress {
+  margin: 0;
+  padding: 0 1.2rem 1rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+}
+.exercise__progress.is-done { color: var(--pass); font-weight: 600; }
+
+.exercise__hints { padding: 0 1.2rem 0.9rem; }
+.hints { margin: 0 0 0.6rem; padding-left: 1.2rem; font-family: var(--font-prose); font-size: 0.95em; color: var(--ink-soft); }
+.hints li { margin-bottom: 0.35rem; }
+.exercise__more {
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.exercise__more:hover { color: var(--accent); border-color: var(--accent); }
+
+.exercise__solution { border-top: 1px solid var(--line); }
+.exercise__solution > summary {
+  padding: 0.7rem 1.2rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.exercise__solution > summary:hover { color: var(--accent); }
+.exercise__solution > .prose { padding: 0 1.2rem 1rem; font-size: 0.95em; }

@@ -31,9 +31,17 @@ from sympy.parsing.sympy_parser import (
     parse_expr,
     standard_transformations,
     implicit_multiplication_application,
+    convert_xor,
 )
 
-TRANSFORMS = standard_transformations + (implicit_multiplication_application,)
+# `convert_xor` makes `^` mean exponentiation. Without it Python's meaning wins
+# and `x^2` is a bitwise XOR — not a mistake anyone catches by reading, because
+# `a*t^2/2` parses without error and simply means something else. Every reader
+# who types `^` means a power, and so does every author.
+TRANSFORMS = standard_transformations + (
+    implicit_multiplication_application,
+    convert_xor,
+)
 
 # Names an author may use without declaring them.
 LOCALS = {
@@ -64,7 +72,7 @@ for _name in ("Q", "E", "I", "N", "S", "O"):
     LOCALS[_name] = Symbol(_name)
 
 
-def parse(text: str, positive=()):
+def parse(text: str, positive=(), declared=()):
     """
     Parse an expression, optionally with symbols declared positive.
 
@@ -76,6 +84,12 @@ def parse(text: str, positive=()):
     names = {**LOCALS}
     for name in positive:
         names[name] = Symbol(name, positive=True)
+    # Anything the caller declares is kept whole. Without this, SymPy's implicit
+    # multiplication splits an unfamiliar multi-character name into single-letter
+    # factors — right for `xy`, catastrophic for `v0`, which becomes v times 0,
+    # the number zero. Initial velocity is the commonest symbol in mechanics.
+    for name in declared:
+        names.setdefault(name, Symbol(name))
     return parse_expr(text, local_dict=names, transformations=TRANSFORMS)
 
 

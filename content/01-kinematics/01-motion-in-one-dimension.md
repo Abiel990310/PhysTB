@@ -181,6 +181,10 @@ and confusing the two is a reliable way to lose marks.
 }
 :::
 
+## Practice
+
+:::exercise kinematics-symbolic
+
 :::recap
 - $v = \tfrac{dx}{dt}$ and $a = \tfrac{dv}{dt}$. Everything in 1-D kinematics
   follows from these two definitions.

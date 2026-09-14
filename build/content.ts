@@ -5,7 +5,7 @@ import matter from 'gray-matter';
 import { createRenderer } from './markdown.ts';
 import { url } from './base.ts';
 import { LANGUAGE } from './language.ts';
-import type { Book, Chapter, CheckMode, Difficulty, Exercise, NavEntry, Part, JudgeCase } from './types.ts';
+import type { AnswerPart, Book, Chapter, Difficulty, Exercise, NavEntry, Part } from './types.ts';
 
 export const CONTENT_DIR = 'content';
 
@@ -18,70 +18,6 @@ function splitOrder(name: string): { order: number; slug: string } {
 
 const asArray = (v: unknown): string[] =>
   Array.isArray(v) ? v.map(String) : typeof v === 'string' && v ? [v] : [];
-
-/** Pull the body of the first fenced code block out of a Markdown section. */
-function firstFence(section: string): string {
-  const match = /```[a-z+]*\n([\s\S]*?)```/.exec(section);
-  return match ? match[1].replace(/\n+$/, '') : '';
-}
-
-/**
- * Parse a `## Cases` section into judge cases.
- *
- * Each case is an ```in fence followed by its ```out fence. An optional `###`
- * heading above a pair names it; a name containing "sample" (or the first case,
- * when nothing is named) is shown to the reader.
- *
- *     ### Sample
- *     ```in
- *     3
- *     1 2 3
- *     ```
- *     ```out
- *     6
- *     ```
- */
-function parseCases(section: string): JudgeCase[] {
-  if (!section.trim()) return [];
-
-  const cases: JudgeCase[] = [];
-  const token = /^###\s+(.+?)\s*$|^```(in|out)\n([\s\S]*?)^```/gm;
-
-  let heading = '';
-  let pendingName = '';
-  let pendingInput: string | null = null;
-  let match: RegExpExecArray | null;
-
-  while ((match = token.exec(section)) !== null) {
-    if (match[1] !== undefined) {
-      heading = match[1].trim();
-      continue;
-    }
-    const body = match[3].replace(/\n+$/, '');
-    if (match[2] === 'in') {
-      pendingInput = body;
-      pendingName = heading || `case ${cases.length + 1}`;
-      heading = '';
-    } else if (pendingInput !== null) {
-      const name = pendingName;
-      cases.push({
-        name,
-        stdin: pendingInput,
-        expected: body,
-        sample: /sample/i.test(name),
-      });
-      pendingInput = null;
-    }
-  }
-
-  // With nothing marked as a sample, show the first case so the reader has an
-  // example of the input format. A judge problem with no visible case at all is
-  // a guessing game.
-  if (cases.length && !cases.some((c) => c.sample)) {
-    cases[0] = { ...cases[0], sample: true };
-  }
-  return cases;
-}
 
 /** Split an exercise body on its `## Section` headings. */
 function splitSections(body: string): Record<string, string> {
@@ -162,6 +98,56 @@ export async function loadBook(root: string): Promise<Book> {
   return { title: 'AP Physics C', parts, exercises };
 }
 
+/**
+ * Read the ```answer blocks out of an exercise body.
+ *
+ * Deliberately a plain line format rather than JSON or YAML: these are written
+ * by hand, several to a file, and the cost of a misplaced brace should not be a
+ * problem that silently fails to load.
+ */
+function parseAnswerParts(body: string): AnswerPart[] {
+  const field = (src: string, name: string): string | null => {
+    const m = src.match(new RegExp(`^${name}:\\s*(.+)$`, 'm'));
+    return m ? m[1].trim() : null;
+  };
+  const list = (src: string, name: string): string[] => {
+    const m = src.match(new RegExp(`^${name}:\\s*\\n((?:\\s+- .*\\n?)+)`, 'm'));
+    if (!m) return [];
+    return m[1]
+      .split('\n')
+      .map((l) => l.replace(/^\s*-\s*/, '').trim())
+      .filter(Boolean);
+  };
+
+  const out: AnswerPart[] = [];
+  for (const [, block] of body.matchAll(/```answer\n([\s\S]*?)```/g)) {
+    const prompt = field(block, 'prompt');
+    const reference = field(block, 'reference');
+    if (!prompt || !reference) continue;
+    out.push({
+      prompt,
+      reference,
+      mode: field(block, 'mode') === 'antiderivative' ? 'antiderivative' : 'expression',
+      variable: field(block, 'variable') ?? 'x',
+      positive: field(block, 'positive') ?? '',
+      accept: list(block, 'accept'),
+      reject: list(block, 'reject'),
+    });
+  }
+  return out;
+}
+
+/**
+ * Strip the `answer` blocks out of prose before rendering it.
+ *
+ * They are the problem's data, not its text — the reader sees an input box
+ * built from them, and showing the reference answer in the prompt would give
+ * the game away.
+ */
+function withoutAnswerBlocks(body: string): string {
+  return body.replace(/```answer\n[\s\S]*?```/g, '').trim();
+}
+
 async function loadExercises(
   contentRoot: string,
   render: Awaited<ReturnType<typeof createRenderer>>,
@@ -181,29 +167,22 @@ async function loadExercises(
       ? (data.difficulty as Difficulty)
       : 'core';
 
+    const promptSource = sections.prompt ?? '';
+
     out.push({
       id: String(data.id ?? basename(file, '.md')),
       title: String(data.title ?? basename(file, '.md')),
       difficulty,
       chapter: String(data.chapter ?? ''),
       topics: asArray(data.topics),
-      standard: String(data.standard ?? LANGUAGE.defaultStandard),
-      check: (data.check === 'output' ? 'output' : 'unit') as CheckMode,
-      stdin: String(data.stdin ?? ''),
-      cases: data.check === 'output' ? parseCases(sections.cases ?? '') : [],
-      timeLimitMs: Number(data.timeLimitMs ?? 0) || 0,
-      promptHtml: render(sections.prompt ?? '').html,
-      starter: firstFence(sections.starter ?? ''),
-      tests:
-        data.check === 'output'
-          ? (firstFence(sections.tests ?? '') || (sections.tests ?? '').trim())
-          : firstFence(sections.tests ?? ''),
+      scope: ['mech', 'em', 'both'].includes(String(data.scope)) ? String(data.scope) : 'mech',
+      promptHtml: render(withoutAnswerBlocks(promptSource)).html,
+      parts: parseAnswerParts(promptSource),
       hints: (sections.hints ?? '')
         .split(/^[-*]\s+/m)
         .map((h) => h.trim())
         .filter(Boolean)
         .map((h) => render(h).html),
-      solution: firstFence(sections.solution ?? ''),
       solutionNotesHtml: render(sections.notes ?? '').html,
     });
   }

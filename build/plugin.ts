@@ -50,16 +50,20 @@ function exercisePayload(e: Exercise) {
     difficulty: e.difficulty,
     chapter: e.chapter,
     topics: e.topics,
-    standard: e.standard,
-    check: e.check,
-    stdin: e.stdin,
-    cases: e.cases,
-    timeLimitMs: e.timeLimitMs,
+    scope: e.scope,
     promptHtml: e.promptHtml,
-    starter: e.starter,
-    tests: e.tests,
+    // `accept` and `reject` are the problem's build-time test data and stay on
+    // the build machine. `reference` has to ship — any grader that runs in the
+    // browser necessarily hands the answer to anyone who opens devtools, which
+    // is the honest cost of a site with no backend.
+    parts: e.parts.map((p) => ({
+      prompt: p.prompt,
+      reference: p.reference,
+      mode: p.mode,
+      variable: p.variable,
+      positive: p.positive,
+    })),
     hints: e.hints,
-    solution: e.solution,
     solutionNotesHtml: e.solutionNotesHtml,
   };
 }
