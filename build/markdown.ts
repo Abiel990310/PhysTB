@@ -298,6 +298,29 @@ export async function createRenderer(): Promise<(src: string) => RenderResult> {
     // and this assignment replaces any earlier one.
     if (token.info.trim() === 'math verify') return renderProved(token.content);
 
+    // A simulation check: the equation of motion, the claimed result, and the
+    // mark saying the build integrated one and compared it to the other.
+    if (token.info.trim() === 'sim verify') {
+      const fields = new Map<string, string>();
+      for (const raw of token.content.split('\n')) {
+        const line = raw.split('#')[0].trim();
+        const at = line.indexOf(':');
+        if (at > 0) fields.set(line.slice(0, at).trim(), line.slice(at + 1).trim());
+      }
+      const row = (label: string, key: string) =>
+        fields.has(key)
+          ? `<div class="sim__row"><span class="sim__label">${label}</span>` +
+            `<code>${escapeHtml(fields.get(key)!)}</code></div>`
+          : '';
+      return `<figure class="proved sim">
+        ${row('equation of motion', 'rates')}
+        ${row('starting from', 'init')}
+        ${row('claimed result', 'exact')}
+        ${row('over', 'span')}
+        <figcaption class="proved__mark">integrated by the build, and it agrees</figcaption>
+      </figure>\n`;
+    }
+
     const meta = parseFenceInfo(token.info);
     const { shown, full } = splitHidden(token.content);
     const highlighted = highlight(shown, meta.lang);

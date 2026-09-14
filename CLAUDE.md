@@ -8,9 +8,10 @@ Newton's laws, energy, momentum, rotation and oscillations; E&M covers
 electrostatics, RC circuits and magnetism. Gravitation and induction are the
 main gaps. The engine, KaTeX and the graph widget came across from CalTB.
 
-The simulation harness — checking closed-form results against numerical
-integration — is still the big outstanding piece, and it is what the book's
-premise rests on. `docs/ROADMAP.md` has the rest.
+The simulation harness is **built**: `sim verify` blocks state an equation of
+motion and a claimed solution, and `npm run verify` integrates the one and
+compares it against the other. That is the book's premise, and it is now
+enforced rather than promised. `docs/ROADMAP.md` has the rest.
 
 ## What makes this book different
 

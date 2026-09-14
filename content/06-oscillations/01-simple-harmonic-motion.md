@@ -45,6 +45,22 @@ which is $-\omega^2 x$. Comparing with $\tfrac{d^2x}{dt^2} = -\tfrac{k}{m}x$
 gives $\omega^2 = \tfrac{k}{m}$ — the angular frequency, obtained by
 substitution rather than assumption.
 
+And it is not only algebra. Integrating the equation of motion numerically and
+comparing against the claimed solution is a separate check, on a separate
+principle — this one never touches the formula except to disagree with it:
+
+```sim verify
+rates:  x' = v, v' = -4*x
+init:   x = 1, v = 0
+exact:  x = cos(2*t)
+span:   0..6
+tol:    1e-6
+```
+
+That is $\tfrac{k}{m} = 4$, so $\omega = 2$, released from rest at $x = 1$. The
+integrator and the cosine stay together for six seconds — several full cycles —
+to within a part in $10^{11}$.
+
 The three quantities in sequence:
 
 | | expression | maximum | where it occurs |

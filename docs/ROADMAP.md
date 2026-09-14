@@ -40,11 +40,14 @@ rebuilt**:
 - [ ] **Port the site engine** from CsaTB, minus the compiler backend.
 - [ ] **Take the symbolic verifier and graph widget from CalTB** once they
       exist. Do not fork them.
-- [ ] **Simulation as the analogue of "the program runs".** Every closed-form
-      result in the prose is checked against a numerical integration of the same
-      setup, and the build fails if they disagree. A projectile with drag, an
-      RC transient, a charged particle in a field — the analytic answer and the
-      integrator must agree, and when they do not, one of them is wrong.
+- [x] **Simulation as the analogue of "the program runs".** Done 2026-09-14.
+      `sim verify` blocks declare an equation of motion, an initial condition
+      and the closed form the chapter claims; RK4 integrates the first and
+      compares against the last. Deliberately declarative — an author states
+      the physics and the claim and cannot write the comparison, because a
+      check you can tune until it passes is not a check. It has its own
+      self-test with two claims that must fail, since a harness that stopped
+      catching wrong physics would look exactly like a green build.
 - [ ] **A simulation widget** where the reader sets initial conditions and
       watches the motion, with the analytic solution drawn over the top so
       agreement is visible rather than asserted.

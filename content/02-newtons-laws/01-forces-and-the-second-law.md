@@ -84,8 +84,24 @@ d/dt (a*(1 - exp(-b*t))) = a*b*exp(-b*t)
 lim t->oo (1 - exp(-b*t)) = 1
 ```
 
-The first checks the shape of the solution — differentiating gives an
-exponential decay, which is what a force that shrinks as you speed up produces.
+And the equation itself can be integrated and compared against that solution,
+which is a stronger claim than differentiating it:
+
+```sim verify
+rates:  v' = 9.8 - 0.5*v
+init:   v = 0
+exact:  v = 19.6*(1 - exp(-0.5*t))
+span:   0..12
+tol:    1e-6
+```
+
+Those numbers are $g = 9.8$ and $\tfrac{b}{m} = 0.5$, giving a terminal velocity
+of $19.6$ m/s. The integrator, which knows only the force law, tracks the
+closed form for twelve seconds.
+
+The first algebraic check confirms the shape of the solution — differentiating
+gives an exponential decay, which is what a force that shrinks as you speed up
+produces.
 The second confirms the approach to terminal velocity: the bracket tends to $1$,
 so $v \to \tfrac{mg}{b}$, and it gets there asymptotically rather than at any
 particular moment.

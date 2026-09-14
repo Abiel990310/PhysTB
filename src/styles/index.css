@@ -138,3 +138,28 @@
   gap: 6px;
 }
 .proved__mark::before { content: "✓"; font-size: 0.95rem; }
+
+/* A simulation check: the equation, the claim, and the verdict. */
+.sim { padding-top: 12px; }
+.sim__row {
+  display: grid;
+  grid-template-columns: 10.5rem 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 3px 0;
+  font-size: 0.88rem;
+}
+.sim__label {
+  color: var(--ink-faint);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sim__row code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+@media (max-width: 34rem) {
+  .sim__row { grid-template-columns: 1fr; gap: 2px; }
+}
