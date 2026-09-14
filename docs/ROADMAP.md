@@ -8,9 +8,31 @@ Take the top unticked item. One item per session, one item per commit.
 written from knowledge, not from the College Board's published Course and Exam
 Description. Before anything is written:
 
-- [ ] **Check the current CED for both exams.** Confirm units, order, exam
-      weightings, and the equation sheet's contents. Record the date of the
-      check and what changed.
+- [x] **Check the current CED for both exams.** Done 2026-09-14, and it
+      mattered. The **2024-25 revision restructured both courses**, and this
+      book had been written against the old shape:
+
+      * Mechanics is seven units, and **gravitation is no longer one of them** —
+        it sits inside unit 2, Force and Translational Dynamics. The chapter
+        moved there.
+      * **Unit 6 is Energy and Momentum of Rotating Systems**, which did not
+        exist here at all; oscillations had been numbered 6 and is really 7.
+      * E&M units are numbered **8 to 13**, continuing from Mechanics rather
+        than restarting. Capacitors is unit 10, not 9.
+      * **Unit 9, Electric Potential, was missing entirely** — a whole unit,
+        between Gauss's law and capacitors, that the capacitors chapter already
+        depended on.
+
+      Both gaps are now written. Every part carries the College Board's own
+      unit name in its `index.md`; before this, no part had one and the site
+      displayed each unit as its raw directory slug.
+
+- [ ] **Confirm against the CED PDFs themselves.** apcentral is blocked by this
+      environment's network egress, so the structure above came from secondary
+      sources that agree with each other. The unit names and order are
+      consistent enough to trust; the **exam weightings** below are the part
+      most worth a second look, since sources differed on the exact ranges for
+      Mechanics.
 
 ## Two exams, one repo
 
@@ -61,23 +83,31 @@ rebuilt**:
 
 ## Provisional structure
 
-### Part 1 — Mechanics
+### Part 1 — Mechanics (units 1-7)
 
-- [x] 1 Kinematics
-- [x] 2 Newton's laws
-- [x] 3 Work, energy, and power
-- [x] 4 Systems of particles and linear momentum
-- [x] 5 Rotation
-- [x] 6 Oscillations
-- [x] 7 Gravitation
+| # | Unit | Weight | State |
+|---|---|---|---|
+| 1 | Kinematics | 10-20% | done |
+| 2 | Force and Translational Dynamics | 20-25% | done; gravitation now lives here |
+| 3 | Work, Energy, and Power | 15-20% | done |
+| 4 | Linear Momentum | 10-15% | done |
+| 5 | Torque and Rotational Dynamics | 20-25% | done |
+| 6 | Energy and Momentum of Rotating Systems | 5-10% | done |
+| 7 | Oscillations | 5-10% | done |
 
-### Part 2 — Electricity and Magnetism
+### Part 2 — Electricity and Magnetism (units 8-13)
 
-- [x] 8 Electrostatics
-- [x] 9 Conductors, capacitors, dielectrics
-- [x] 10 Electric circuits
-- [x] 11 Magnetic fields
-- [x] 12 Electromagnetism (induction)
+| # | Unit | Weight | State |
+|---|---|---|---|
+| 8 | Electric Charges, Fields, and Gauss's Law | 15-25% | done |
+| 9 | Electric Potential | 10-20% | done |
+| 10 | Conductors and Capacitors | 10-15% | done |
+| 11 | Electric Circuits | 15-25% | done |
+| 12 | Magnetic Fields and Electromagnetism | 10-20% | done |
+| 13 | Electromagnetic Induction | 10-20% | done |
+
+Every unit now has at least one chapter. The heavy units — 2, 5, 8 and 11 — are
+where a second chapter is worth more than a first chapter anywhere else.
 
 ## Rules specific to this book
 

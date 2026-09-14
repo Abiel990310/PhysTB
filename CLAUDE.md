@@ -3,12 +3,11 @@
 An interactive **AP Physics C** textbook — Mechanics and E&M — in the same
 family as CppTB, JavaTB, CsaTB and CalTB.
 
-**Eleven chapters written, 58 claims, 2 simulation checks and 8 graded
-problems.** Mechanics
-covers kinematics, Newton's laws, energy, momentum, rotation, oscillations and
-gravitation — all seven units. E&M covers electrostatics, circuits, magnetism
-and induction; capacitors are the main gap. The engine, KaTeX, the graph widget
-and the answer grader came across from CalTB.
+**Fourteen chapters written, 80 claims, 2 simulation checks and 8 graded
+problems.** **Every one of the thirteen units has at least one chapter**, after
+the CED check found the structure had been written against the pre-2024 course.
+The engine, KaTeX, the graph widget and the answer grader came across from
+CalTB; the simulation widget is this book's own.
 
 The simulation harness is **built**: `sim verify` blocks state an equation of
 motion and a claimed solution, and `npm run verify` integrates the one and
@@ -37,6 +36,14 @@ SymPy reads `^` as a bitwise XOR unless told otherwise, so `a*t^2/2` parses
 cleanly and means something else; and it splits any undeclared multi-character
 symbol into single letters, which turns **`v0` into the number zero**. Initial
 velocity is the commonest symbol in mechanics. Declare the names.
+
+Readers get that machine too, not just its verdict. `<tb-sim>` hands them the
+equation of motion with sliders, draws the numerical solution, and — where a
+chapter gives a closed form — draws that underneath with the largest gap between
+them reported. Dragging a pendulum's release angle until the small-angle cosine
+visibly separates teaches the approximation better than the paragraph does.
+`verify:ode` keeps the browser's RK4 and `check_sim.py`'s in step, so the motion
+a reader watches is the motion the build checked.
 
 E&M's real difficulty is geometry, so field and equipotential visualisers matter
 more here than anywhere else in the family.
