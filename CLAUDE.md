@@ -3,10 +3,10 @@
 An interactive **AP Physics C** textbook — Mechanics and E&M — in the same
 family as CppTB, JavaTB, CsaTB and CalTB.
 
-**Seven chapters written, 46 claims checked.** Mechanics covers kinematics,
-Newton's laws, energy, momentum, rotation and oscillations; E&M covers
-electrostatics, RC circuits and magnetism. Gravitation and induction are the
-main gaps. The engine, KaTeX and the graph widget came across from CalTB.
+**Eleven chapters written, 58 claims and 2 simulation checks.** Mechanics
+covers kinematics, Newton's laws, energy, momentum, rotation, oscillations and
+gravitation — all seven units. E&M covers electrostatics, circuits, magnetism
+and induction; capacitors are the main gap. The engine, KaTeX and the graph widget came across from CalTB.
 
 The simulation harness is **built**: `sim verify` blocks state an equation of
 motion and a claimed solution, and `npm run verify` integrates the one and

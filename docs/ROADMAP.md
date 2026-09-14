@@ -69,7 +69,7 @@ rebuilt**:
 - [x] 4 Systems of particles and linear momentum
 - [x] 5 Rotation
 - [x] 6 Oscillations
-- [ ] 7 Gravitation
+- [x] 7 Gravitation
 
 ### Part 2 — Electricity and Magnetism
 
@@ -77,7 +77,7 @@ rebuilt**:
 - [ ] 9 Conductors, capacitors, dielectrics
 - [x] 10 Electric circuits
 - [x] 11 Magnetic fields
-- [ ] 12 Electromagnetism
+- [x] 12 Electromagnetism (induction)
 
 ## Rules specific to this book
 
