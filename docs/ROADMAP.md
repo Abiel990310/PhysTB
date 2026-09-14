@@ -74,7 +74,7 @@ rebuilt**:
 ### Part 2 — Electricity and Magnetism
 
 - [x] 8 Electrostatics
-- [ ] 9 Conductors, capacitors, dielectrics
+- [x] 9 Conductors, capacitors, dielectrics
 - [x] 10 Electric circuits
 - [x] 11 Magnetic fields
 - [x] 12 Electromagnetism (induction)

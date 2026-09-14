@@ -222,7 +222,14 @@ def check(claim: dict) -> dict:
             #  antiderivatives of the same function differ by a constant, and a
             #  constant differentiates away.
             var = p(claim["var"])
-            claimed = p(claim["rhs"]).subs(LOCALS["C"], 0)
+            claimed = p(claim["rhs"])
+            # `C` is the constant of integration and is substituted away — but
+            # only when the block has not claimed the letter for something else.
+            # In E&M, C is capacitance: zeroing it turns the true statement
+            # `int Q/C dQ = Q**2/(2*C)` into a division by zero. A block that
+            # says `# symbols: C` means the physical quantity, and keeps it.
+            if "C" not in declared:
+                claimed = claimed.subs(LOCALS["C"], 0)
             status, detail = zero_verdict(diff(claimed, var) - p(claim["lhs"]), var)
 
         elif kind == "limit":
