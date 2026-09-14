@@ -71,7 +71,7 @@ d/dv (m*v**2/2) = m*v
 
 The chain rule step in the middle — rewriting $dx$ as $\tfrac{dx}{dt}dt$ — is
 the manoeuvre that converts an integral over distance into one over velocity.
-This is chapter 2.3 of CalTB doing real work in a physics derivation.
+This is chapter 3.1 of CalTB doing real work in a physics derivation.
 
 ## Conservative forces and potential energy
 
