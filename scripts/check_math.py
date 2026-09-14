@@ -50,6 +50,19 @@ LOCALS = {
     "pi": sympy.pi,
 }
 
+# Six capitals are already taken in SymPy's namespace, and every one of them is
+# a letter physics uses constantly: Q is the assumptions registry, E is Euler's
+# number, I is the imaginary unit, and N, S and O are utilities. Left alone, a
+# circuits chapter writing I for current gets sqrt(-1), and one writing Q for
+# charge gets an assumptions object — which fails loudly if you are lucky and
+# silently if you are not.
+#
+# `C` is deliberately NOT in this list: it stays the constant of integration,
+# which the integral check substitutes away. A chapter needing capacitance in
+# an *integral* claim should name it something else.
+for _name in ("Q", "E", "I", "N", "S", "O"):
+    LOCALS[_name] = Symbol(_name)
+
 
 def parse(text: str, positive=()):
     """

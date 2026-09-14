@@ -50,3 +50,16 @@ being threaded through.
 lim t->oo (1 - exp(-b*t)) = 1
 lim t->oo exp(-b*t) = 0
 ```
+
+Capitals that SymPy already owns. `I` is its imaginary unit, `E` its Euler
+number and `Q` its assumptions registry — and all three are letters physics uses
+for current, EMF and charge. These confirm they behave as ordinary symbols, so
+a circuits chapter means what it writes.
+
+```math verify
+# expect: ok
+d/dI (I**2*R) = 2*I*R
+d/dQ (Q**2/2) = Q
+E*I = I*E
+d/dt (Q*exp(-t)) = -Q*exp(-t)
+```
