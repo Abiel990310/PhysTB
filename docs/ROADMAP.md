@@ -60,20 +60,20 @@ rebuilt**:
 
 ### Part 1 — Mechanics
 
-- [ ] 1 Kinematics
-- [ ] 2 Newton's laws
-- [ ] 3 Work, energy, and power
-- [ ] 4 Systems of particles and linear momentum
-- [ ] 5 Rotation
-- [ ] 6 Oscillations
+- [x] 1 Kinematics
+- [x] 2 Newton's laws
+- [x] 3 Work, energy, and power
+- [x] 4 Systems of particles and linear momentum
+- [x] 5 Rotation
+- [x] 6 Oscillations
 - [ ] 7 Gravitation
 
 ### Part 2 — Electricity and Magnetism
 
-- [ ] 8 Electrostatics
+- [x] 8 Electrostatics
 - [ ] 9 Conductors, capacitors, dielectrics
-- [ ] 10 Electric circuits
-- [ ] 11 Magnetic fields
+- [x] 10 Electric circuits
+- [x] 11 Magnetic fields
 - [ ] 12 Electromagnetism
 
 ## Rules specific to this book
