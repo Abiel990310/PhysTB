@@ -1,4 +1,140 @@
+@import "katex/dist/katex.min.css";
 @import "./tokens.css";
 @import "./layout.css";
 @import "./prose.css";
 @import "./components.css";
+
+/* ---- Interactive graphs ------------------------------------------------- */
+
+.graph {
+  --graph-ink: var(--ink);
+  --graph-faint: var(--line-strong);
+  --graph-curve: var(--accent);
+  --graph-mark: #b3541e;
+  --graph-fill: var(--accent-soft);
+  margin: 28px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-raised);
+}
+
+:root[data-theme='dark'] .graph {
+  /* Only the two colours that are not already book tokens need a dark value:
+     the mark and the fill have to stay legible against a dark panel. */
+  --graph-mark: #e8a06d;
+  --graph-fill: rgba(109, 178, 232, 0.22);
+}
+
+.graph__title {
+  font-weight: 650;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.graph__canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 100%;
+}
+
+.graph__readout {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.graph__stat { color: var(--ink-soft); }
+
+.graph__rules {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.graph__rules button {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.graph__rules button.is-on {
+  background: var(--graph-curve);
+  border-color: var(--graph-curve);
+  color: #fff;
+}
+
+.graph__controls { margin-top: 12px; display: grid; gap: 8px; }
+
+.graph__control {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+}
+.graph__control input[type='range'] { width: 100%; accent-color: var(--graph-mark); }
+.graph__name { color: var(--ink-soft); min-width: 1.5em; }
+.graph__control output {
+  font-variant-numeric: tabular-nums;
+  min-width: 4em;
+  text-align: right;
+  color: var(--ink);
+}
+
+.graph__error {
+  border-left: 3px solid #c0392b;
+  padding-left: 12px;
+  color: #c0392b;
+  font-size: 0.9rem;
+}
+
+
+/* ---- Typeset mathematics ------------------------------------------------ */
+
+.katex { font-size: 1.05em; }
+
+.katex-display {
+  margin: 20px 0;
+  padding: 4px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* A long equation scrolls inside its own box rather than widening the page. */
+.katex-display > .katex { text-align: center; }
+
+/* ---- Verified claims ---------------------------------------------------- */
+
+/* These are the chapter's mathematics AND its evidence, so they get a panel
+   that looks deliberate rather than a code block that looks like leftovers. */
+.proved {
+  margin: 24px 0;
+  padding: 6px 18px 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--pass);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+}
+
+.proved__list { list-style: none; margin: 0; padding: 0; }
+
+.proved__row { margin: 0; padding: 0; }
+.proved__row + .proved__row { border-top: 1px dashed var(--line); }
+.proved__row .katex-display { margin: 12px 0; }
+
+.proved__mark {
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pass);
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.proved__mark::before { content: "✓"; font-size: 0.95rem; }

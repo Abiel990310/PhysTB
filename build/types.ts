@@ -48,6 +48,13 @@ export interface Chapter {
   readonly requires: readonly string[];
   /** Language version the chapter's code assumes, e.g. "java21". */
   readonly standard: string;
+  /**
+   * Which exam this chapter belongs to. Unlike CalTB's ab/bc, neither of these
+   * contains the other — Mechanics and E&M are taken independently and share
+   * almost no content — so a reader picks one rather than being filtered into
+   * a subset. `both` is for the shared calculus and method chapters.
+   */
+  readonly scope: 'mech' | 'em' | 'both';
   readonly status: 'draft' | 'complete';
   readonly order: number;
   readonly headings: readonly Heading[];

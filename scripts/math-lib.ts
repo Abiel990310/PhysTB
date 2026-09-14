@@ -87,19 +87,31 @@ export async function collect(dir = 'content'): Promise<{ claims: Claim[]; bad: 
     const rel = relative(ROOT, path);
     const lines = (await readFile(path, 'utf8')).split('\n');
     let inBlock = false;
+    let positive: string[] = [];
 
     for (let i = 0; i < lines.length; ++i) {
       const line = lines[i];
-      if (/^```math\s+verify\s*$/.test(line.trim())) { inBlock = true; continue; }
+      if (/^```math\s+verify\s*$/.test(line.trim())) { inBlock = true; positive = []; continue; }
       if (inBlock && line.trim().startsWith('```')) { inBlock = false; continue; }
       if (!inBlock) continue;
+
+      const assume = line.match(/^\s*#\s*assume:\s*(.+)$/);
+      if (assume) {
+        // "b > 0, m > 0" -> ['b', 'm']. Only positivity is supported; anything
+        // else would need a richer assumption model than this book has needed.
+        positive = assume[1]
+          .split(',')
+          .map((c) => c.trim().match(/^([A-Za-z_][A-Za-z0-9_]*)\s*>\s*0$/)?.[1])
+          .filter((n): n is string => Boolean(n));
+        continue;
+      }
 
       const text = line.split('#')[0].trim();       // `#` starts a comment
       if (!text) continue;
 
       const parsed = parseClaim(text, rel, i + 1);
       if (typeof parsed === 'string') bad.push(`${rel}:${i + 1}  ${text}\n         ${parsed}`);
-      else claims.push(parsed);
+      else claims.push(positive.length > 0 ? { ...parsed, positive } : parsed);
     }
   }
   return { claims, bad };

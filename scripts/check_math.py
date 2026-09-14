@@ -51,8 +51,19 @@ LOCALS = {
 }
 
 
-def parse(text: str):
-    return parse_expr(text, local_dict=LOCALS, transformations=TRANSFORMS)
+def parse(text: str, positive=()):
+    """
+    Parse an expression, optionally with symbols declared positive.
+
+    A claim may say `# assume: b > 0`, which matters because many true physical
+    statements are false without it — a decay towards a limit runs the other way
+    for a negative rate constant. The assumption is the author's, written in the
+    source, rather than something the checker grants silently.
+    """
+    names = {**LOCALS}
+    for name in positive:
+        names[name] = Symbol(name, positive=True)
+    return parse_expr(text, local_dict=names, transformations=TRANSFORMS)
 
 
 def numeric_disagreement(expr, var, tries: int = 40):
@@ -75,6 +86,24 @@ def numeric_disagreement(expr, var, tries: int = 40):
         if abs(value) > 1e-6:
             return point, value
     return None
+
+
+def same_verdict(got, expected, var):
+    """
+    Classify whether `got` equals `expected`.
+
+    Subtracting is the usual route, but it breaks on infinities: a limit of oo
+    compared against oo gives oo - oo, which is nan, and nan is not zero — so
+    every correct infinite limit would be reported undecidable. Structural
+    equality is checked first for exactly that case.
+    """
+    if got == expected:
+        return "ok", None
+    if got in (oo, -oo) or expected in (oo, -oo):
+        # One side is infinite and they are not the same object, so they differ:
+        # oo vs -oo, or oo vs a finite value. Both are definite answers.
+        return "wrong", f"{got} is not {expected}"
+    return zero_verdict(got - expected, var)
 
 
 def zero_verdict(difference, var):
@@ -114,34 +143,39 @@ def zero_verdict(difference, var):
 
 def check(claim: dict) -> dict:
     kind = claim["kind"]
+    pos = tuple(claim.get("positive") or ())
+
+    def p(text):
+        return parse(text, pos)
+
     try:
         if kind == "deriv":
             #  d/dx <expr> = <claimed>
-            var = parse(claim["var"])
-            got = diff(parse(claim["lhs"]), var)
-            status, detail = zero_verdict(got - parse(claim["rhs"]), var)
+            var = p(claim["var"])
+            got = diff(p(claim["lhs"]), var)
+            status, detail = zero_verdict(got - p(claim["rhs"]), var)
 
         elif kind == "integ":
             #  int <expr> d<var> = <claimed antiderivative>, up to a constant.
             #  Differentiating the claim is what makes +C a non-issue: any two
             #  antiderivatives of the same function differ by a constant, and a
             #  constant differentiates away.
-            var = parse(claim["var"])
-            claimed = parse(claim["rhs"]).subs(LOCALS["C"], 0)
-            status, detail = zero_verdict(diff(claimed, var) - parse(claim["lhs"]), var)
+            var = p(claim["var"])
+            claimed = p(claim["rhs"]).subs(LOCALS["C"], 0)
+            status, detail = zero_verdict(diff(claimed, var) - p(claim["lhs"]), var)
 
         elif kind == "limit":
-            var = parse(claim["var"])
-            got = limit(parse(claim["lhs"]), var, parse(claim["to"]))
-            status, detail = zero_verdict(got - parse(claim["rhs"]), None)
+            var = p(claim["var"])
+            got = limit(p(claim["lhs"]), var, p(claim["to"]))
+            status, detail = same_verdict(got, p(claim["rhs"]), None)
 
         elif kind == "sum":
-            var = parse(claim["var"])
-            got = summation(parse(claim["lhs"]), (var, parse(claim["lo"]), parse(claim["hi"])))
-            status, detail = zero_verdict(got - parse(claim["rhs"]), None)
+            var = p(claim["var"])
+            got = summation(p(claim["lhs"]), (var, p(claim["lo"]), p(claim["hi"])))
+            status, detail = same_verdict(got, p(claim["rhs"]), None)
 
         elif kind == "ident":
-            lhs, rhs = parse(claim["lhs"]), parse(claim["rhs"])
+            lhs, rhs = p(claim["lhs"]), p(claim["rhs"])
             free = sorted(lhs.free_symbols | rhs.free_symbols, key=str)
             status, detail = zero_verdict(lhs - rhs, free[0] if free else None)
 

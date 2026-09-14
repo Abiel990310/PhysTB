@@ -16,6 +16,8 @@ int 1/x dx = log(x)
 int 2*x dx = x**2 + 17
 lim x->0 sin(x)/x = 1
 lim x->oo (1 + 1/x)**x = e
+lim x->0 1/x**2 = oo
+lim x->oo x**2 = oo
 sum n=0..oo 1/2**n = 2
 sum n=1..oo 1/n**2 = pi**2/6
 sin(x)**2 + cos(x)**2 = 1
@@ -27,6 +29,7 @@ sin(x)**2 + cos(x)**2 = 1
 d/dx x**3 = 2*x**2
 int x*exp(x) dx = exp(x)*(x + 1)
 lim x->0 sin(x)/x = 0
+lim x->0 1/x**2 = -oo
 sin(x)**2 + cos(x)**2 = 2
 sum n=1..oo 1/n**2 = pi**2/7
 ```
@@ -34,4 +37,16 @@ sum n=1..oo 1/n**2 = pi**2/7
 ```math verify
 # expect: unproved
 asin(x) + acos(x) = pi/2
+```
+
+An assumption the author declares, which the checker honours. Without the
+`assume` line this claim is false — a decay runs the other way when the rate
+constant is negative — so this is also a test that the declaration is actually
+being threaded through.
+
+```math verify
+# expect: ok
+# assume: b > 0
+lim t->oo (1 - exp(-b*t)) = 1
+lim t->oo exp(-b*t) = 0
 ```

@@ -6,13 +6,14 @@
   "description": "An interactive AP Physics C textbook \u2014 Mechanics and E&M.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run math:latex && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "setup": "python3 -m pip install --quiet sympy",
     "verify": "npm run typecheck && npm run verify:selftest && npm run verify:math",
     "verify:math": "node --no-warnings --experimental-strip-types scripts/verify-math.ts",
-    "verify:selftest": "node --no-warnings --experimental-strip-types scripts/selftest-math.ts"
+    "verify:selftest": "node --no-warnings --experimental-strip-types scripts/selftest-math.ts",
+    "math:latex": "node --no-warnings --experimental-strip-types scripts/build-math-latex.ts"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
@@ -24,5 +25,9 @@
     "shiki": "^1.24.4",
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
+  },
+  "dependencies": {
+    "@vscode/markdown-it-katex": "^1.1.2",
+    "katex": "^0.18.7"
   }
 }

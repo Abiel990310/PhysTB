@@ -1,0 +1,18 @@
+{
+  "int k*x dx = k*x**2/2": "\\int k x\\, dx = \\frac{k x^{2}}{2}",
+  "d/dx (k*x**2/2) = k*x": "\\frac{\\partial}{\\partial x} \\frac{k x^{2}}{2} = k x",
+  "int m*v dv = m*v**2/2": "\\int m v\\, dv = \\frac{m v^{2}}{2}",
+  "d/dv (m*v**2/2) = m*v": "\\frac{\\partial}{\\partial v} \\frac{m v^{2}}{2} = m v",
+  "d/dx (m*g*x) = m*g": "\\frac{\\partial}{\\partial x} g m x = g m",
+  "d/dx (x**3 - 3*x) = 3*x**2 - 3": "\\frac{d}{d x} \\left(x^{3} - 3 x\\right) = 3 x^{2} - 3",
+  "d/dx (3*x**2 - 3) = 6*x": "\\frac{d}{d x} \\left(3 x^{2} - 3\\right) = 6 x",
+  "d/dt (a*(1 - exp(-b*t))) = a*b*exp(-b*t)": "\\frac{\\partial}{\\partial t} a \\left(1 - e^{- b t}\\right) = a b e^{- b t}",
+  "lim t->oo (1 - exp(-b*t)) = 1": "\\lim_{t \\to \\infty}\\left(1 - e^{- b t}\\right) = 1",
+  "d/dt (5*t**3 - 2*t**2 + 7) = 15*t**2 - 4*t": "\\frac{d}{d t} \\left(5 t^{3} - 2 t^{2} + 7\\right) = 15 t^{2} - 4 t",
+  "d/dt (15*t**2 - 4*t) = 30*t - 4": "\\frac{d}{d t} \\left(15 t^{2} - 4 t\\right) = 30 t - 4",
+  "d/dt (v + a*t) = a": "\\frac{\\partial}{\\partial t} \\left(a t + v\\right) = a",
+  "d/dt (b + v*t + a*t**2/2) = a*t + v": "\\frac{\\partial}{\\partial t} \\left(\\frac{a t^{2}}{2} + b + t v\\right) = a t + v",
+  "int a dt = a*t": "\\int a\\, dt = a t",
+  "int (v + a*t) dt = v*t + a*t**2/2": "\\int \\left(a t + v\\right)\\, dt = \\frac{a t^{2}}{2} + t v",
+  "d/dt (t**2 - 3*t) = 2*t - 3": "\\frac{d}{d t} \\left(t^{2} - 3 t\\right) = 2 t - 3"
+}

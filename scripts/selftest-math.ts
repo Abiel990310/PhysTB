@@ -22,15 +22,28 @@ const expected: string[] = [];
 
 let inBlock = false;
 let expecting = '';
+let positive: string[] = [];
 
 for (let i = 0; i < lines.length; ++i) {
   const line = lines[i];
-  if (/^```math\s+verify\s*$/.test(line.trim())) { inBlock = true; continue; }
+  if (/^```math\s+verify\s*$/.test(line.trim())) { inBlock = true; positive = []; continue; }
   if (inBlock && line.trim().startsWith('```')) { inBlock = false; continue; }
   if (!inBlock) continue;
 
   const marker = line.match(/^\s*#\s*expect:\s*(ok|wrong|unproved)\s*$/);
   if (marker) { expecting = marker[1]; continue; }
+
+  // The fixture exercises author-declared assumptions too, so this parser has
+  // to understand them — it reads the file itself rather than going through
+  // collect(), and silently dropping the declaration made a true claim fail.
+  const assume = line.match(/^\s*#\s*assume:\s*(.+)$/);
+  if (assume) {
+    positive = assume[1]
+      .split(',')
+      .map((c) => c.trim().match(/^([A-Za-z_][A-Za-z0-9_]*)\s*>\s*0$/)?.[1])
+      .filter((n): n is string => Boolean(n));
+    continue;
+  }
 
   const text = line.split('#')[0].trim();
   if (!text) continue;
@@ -40,7 +53,7 @@ for (let i = 0; i < lines.length; ++i) {
     console.log(`  FAIL fixture:${i + 1}  ${text}\n       did not parse: ${parsed}`);
     process.exit(1);
   }
-  claims.push(parsed);
+  claims.push(positive.length > 0 ? { ...parsed, positive } : parsed);
   expected.push(expecting);
 }
 

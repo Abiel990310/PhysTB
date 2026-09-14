@@ -138,6 +138,7 @@ export async function loadBook(root: string): Promise<Book> {
         objectives: asArray(data.objectives),
         requires: asArray(data.requires),
         standard: String(data.standard ?? LANGUAGE.defaultStandard),
+        scope: data.scope === 'em' ? 'em' : data.scope === 'both' ? 'both' : 'mech',
         status: data.status === 'complete' ? 'complete' : 'draft',
         order: f.order,
         headings,
@@ -158,7 +159,7 @@ export async function loadBook(root: string): Promise<Book> {
   }
 
   const exercises = await loadExercises(contentRoot, render);
-  return { title: 'The Java Textbook', parts, exercises };
+  return { title: 'AP Physics C', parts, exercises };
 }
 
 async function loadExercises(
