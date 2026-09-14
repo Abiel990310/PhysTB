@@ -1,0 +1,45 @@
+name: Verify
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      # This book has no compiler. Its claims are settled by SymPy, so that is
+      # what has to be present and pinned — a checker running on a different
+      # version could decide a claim differently, and "it proved on my machine"
+      # is exactly the failure this whole arrangement exists to prevent.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install SymPy
+        run: python3 -m pip install --quiet sympy
+
+      - run: npm ci
+
+      - name: SymPy version
+        run: python3 -c "import sympy; print('sympy', sympy.__version__)"
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: The checker catches false mathematics
+        run: npm run verify:selftest
+
+      - name: Every claim in the book checks out
+        run: npm run verify:math
+
+      - name: Build the site
+        run: npx vite build

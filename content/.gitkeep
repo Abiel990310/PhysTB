@@ -1,0 +1,3 @@
+# Keeps this directory in git, which does not track empty directories.
+# Without it the build fails in CI with ENOENT on content/ while passing
+# locally, because a local mkdir leaves a directory git never records.

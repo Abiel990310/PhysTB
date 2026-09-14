@@ -1,0 +1,28 @@
+{
+  "name": "phystb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An interactive AP Physics C textbook \u2014 Mechanics and E&M.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "setup": "python3 -m pip install --quiet sympy",
+    "verify": "npm run typecheck && npm run verify:selftest && npm run verify:math",
+    "verify:math": "node --no-warnings --experimental-strip-types scripts/verify-math.ts",
+    "verify:selftest": "node --no-warnings --experimental-strip-types scripts/selftest-math.ts"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^22.10.2",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "playwright": "^1.63.0",
+    "shiki": "^1.24.4",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}
