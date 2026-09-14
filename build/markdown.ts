@@ -84,7 +84,7 @@ function splitHidden(source: string): { shown: string; full: string } {
  * as Markdown; raw containers (memviz, exercise) keep their body verbatim so
  * the client can parse it.
  */
-const RAW_CONTAINERS = new Set(['memviz', 'exercise', 'quiz', 'graph']);
+const RAW_CONTAINERS = new Set(['memviz', 'exercise', 'quiz', 'graph', 'sim']);
 const PROSE_CONTAINERS: Record<string, { label: string; cls: string }> = {
   note: { label: 'Note', cls: 'note' },
   tip: { label: 'Tip', cls: 'tip' },
@@ -158,6 +158,13 @@ function containerPlugin(md: MarkdownIt): void {
     if (name === 'exercise') {
       return `<tb-exercise data-id="${escapeHtml(args)}"></tb-exercise>\n`;
     }
+    if (name === 'sim') {
+      // The body is the same block format `sim verify` fences use, so a chapter
+      // can check a result and then hand the reader the identical system to
+      // play with, without stating it twice.
+      return `<tb-sim>${escapeHtml(body ?? '')}</tb-sim>\n`;
+    }
+
     if (name === 'graph') {
       return `<tb-graph><template data-role="spec">${escapeHtml(body ?? '')}</template></tb-graph>\n`;
     }

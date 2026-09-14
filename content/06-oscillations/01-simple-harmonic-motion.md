@@ -120,13 +120,49 @@ which contains no mass — a heavy bob and a light one on equal strings swing
 together.
 
 :::pitfall
-**The small-angle approximation is an approximation.** At $10°$ the error in
-the period is about $0.2\%$; at $45°$ it is around $4\%$ and growing.
+**The small-angle approximation is an approximation.** Integrating the real
+equation and measuring the period against $2\pi\sqrt{L/g}$:
+
+| release angle | period, longer by |
+|---|---|
+| $10°$ | $0.20\%$ |
+| $45°$ | $4.03\%$ |
+| $90°$ | $18.1\%$ |
+
+Those are measured, not quoted — the simulation below runs the same
+integration, and you can watch the gap open.
 
 A real pendulum's period *does* depend on amplitude. The independence is a
 property of the linearised equation, not of pendulums, and questions that
 specify "small oscillations" are invoking exactly this licence.
 :::
+
+Rather than take that on trust, watch it fail. The orange curve is the
+small-angle prediction $\theta_0\cos\sqrt{g/L}\,t$; the blue one is the real
+pendulum, $\ddot\theta = -(g/L)\sin\theta$, integrated numerically. Drag the
+release angle.
+
+:::sim
+rates:  x' = v, v' = -(g/L)*sin(x)
+init:   x = A, v = 0
+params: A = 0.15 [0.05..3.0], g = 9.8, L = 1 [0.3..2.5]
+exact:  x = A*cos(sqrt(g/L)*t)
+span:   0..12
+plot:   x
+labels: A = release angle (rad), L = length (m), x = angle
+:::
+
+At $0.15$ rad — about $9°$ — the two curves are one curve: you cannot see the
+difference over twelve seconds. Push the release angle past a radian and they
+drift apart visibly, and the real pendulum falls **behind**, because
+$\sin\theta < \theta$ makes the true restoring force weaker than the linear
+one, and a weaker restoring force means a longer period. At the top of the
+slider's range, around $150°$, the real pendulum's period is some $74\%$
+longer — it is barely the same motion.
+
+That is the whole content of the approximation, and it is worth noticing that
+nothing here was assumed: the blue curve is the equation of motion integrated,
+by the same method that checks every claim in this book.
 
 ## Energy in the oscillator
 

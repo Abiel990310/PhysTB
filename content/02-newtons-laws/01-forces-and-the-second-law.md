@@ -95,6 +95,41 @@ span:   0..12
 tol:    1e-6
 ```
 
+Drag the drag coefficient and watch where the velocity levels off. The orange
+curve is the closed form above; the blue one is the equation of motion
+integrated.
+
+:::sim
+rates:  v' = g - b*v
+init:   v = 0
+params: b = 0.5 [0.05..2.0], g = 9.8
+exact:  v = (g/b)*(1 - exp(-b*t))
+span:   0..20
+plot:   v
+labels: b = drag coefficient b/m, v = velocity (m/s)
+:::
+
+Terminal velocity is $g/b$ — halve the drag and the final speed doubles, which
+the slider makes obvious and which the algebra states without ever making you
+feel it.
+
+Now the case with no closed form. Real drag at speed goes as $v^2$, not $v$, and
+$\dot v = g - cv^2$ has a solution in $\tanh$ that no AP course asks for. The
+integration does not care:
+
+:::sim
+rates:  v' = g - c*v*v
+init:   v = 0
+params: c = 0.02 [0.002..0.2], g = 9.8
+span:   0..25
+plot:   v
+labels: c = drag coefficient c/m, v = velocity (m/s)
+:::
+
+There is no orange curve here because there is no formula to draw — and that is
+the point of chapter 2.1. The equation of motion is the physics; a closed form
+is a convenience that some problems happen to admit.
+
 Those numbers are $g = 9.8$ and $\tfrac{b}{m} = 0.5$, giving a terminal velocity
 of $19.6$ m/s. The integrator, which knows only the force law, tracks the
 closed form for twelve seconds.

@@ -653,3 +653,64 @@ a.exercise__title:hover { color: var(--accent); }
 }
 .exercise__solution > summary:hover { color: var(--accent); }
 .exercise__solution > .prose { padding: 0 1.2rem 1rem; font-size: 0.95em; }
+
+/* ---- simulations ------------------------------------------------------- */
+
+tb-sim { display: block; }
+.sim {
+  margin: 1.6rem 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-soft, var(--bg));
+  overflow: hidden;
+}
+.sim__error { padding: 1rem; margin: 0; font-family: var(--font-ui); font-size: var(--step--1); color: var(--fail); }
+.sim__figure {
+  margin: 0;
+  padding: 0.8rem 0.8rem 0;
+  /* The canvas reads its colours from here, so the tokens must resolve on the
+     figure rather than on the host element. */
+  color: var(--ink);
+}
+.sim__canvas { display: block; width: 100%; height: 260px; }
+
+.sim__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.9rem;
+  align-items: center;
+  padding: 0.7rem 0.9rem;
+}
+.sim__play, .sim__reset {
+  padding: 0.3rem 0.85rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.sim__play { color: var(--bg); background: var(--accent); border: 0; }
+.sim__play:hover { filter: brightness(1.08); }
+.sim__reset { color: var(--ink-soft); background: none; border: 1px solid var(--line); }
+.sim__reset:hover { color: var(--accent); border-color: var(--accent); }
+
+.sim__param { display: flex; flex-direction: column; gap: 0.15rem; min-width: 8.5rem; flex: 1 1 8.5rem; }
+.sim__param-name {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+.sim__slider { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+.sim__readout {
+  margin: 0;
+  padding: 0 0.9rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .sim__canvas { height: 200px; }
+}

@@ -169,6 +169,25 @@ engineering failure.
 }
 :::
 
+## Watch the time constant
+
+:::sim
+rates:  q' = (V - q/C)/R
+init:   q = 0
+params: R = 3 [0.5..10], C = 2 [0.5..5], V = 5
+exact:  q = C*V*(1 - exp(-t/(R*C)))
+span:   0..40
+plot:   q
+labels: R = resistance (ohms), C = capacitance (F), q = charge (C)
+:::
+
+The charge climbs to $CV$ and the approach is exponential with time constant
+$\tau = RC$. Raising either $R$ or $C$ slows the charging; raising $C$ also
+raises the final charge, while raising $R$ does not. That asymmetry is worth
+pausing on — $R$ controls only *how fast*, $C$ controls *how much and how fast*
+— and it is immediate on the sliders and easy to miss in the algebra.
+
+
 :::recap
 - The loop rule is energy conservation and the junction rule is charge
   conservation.

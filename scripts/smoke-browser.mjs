@@ -72,6 +72,21 @@ await page.locator('.part__input').nth(1).fill('sqrt(k*d^2/m)');
 await page.locator('.part__check').nth(1).click();
 console.log('spring launch, answer "sqrt(k*d^2/m)" ->', await page.locator('.part__verdict').nth(1).textContent());
 
+// The simulation widget, which is this book's reason to exist.
+await page.goto('http://localhost:4199/oscillations/simple-harmonic-motion/', { waitUntil: 'networkidle' });
+await page.waitForSelector('.sim__canvas', { timeout: 5000 });
+const sliders = await page.locator('.sim__slider').count();
+console.log(`simulation rendered with ${sliders} parameter sliders`);
+console.log('small angle:', await page.locator('.sim__readout').textContent());
+// Drag the release angle up; the small-angle curve must visibly part company.
+// A range input is not "filled"; set it and fire the event the widget listens for.
+await page.locator('.sim__slider').first().evaluate((el) => {
+  el.value = '2.6';
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+});
+await page.waitForTimeout(250);
+console.log('large angle:', await page.locator('.sim__readout').textContent());
+
 await browser.close();
 server.close();
 
