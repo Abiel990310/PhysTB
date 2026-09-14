@@ -51,8 +51,8 @@ export function renderHome(book: Book, assets: Assets): string {
 
   const main = `<article class="prose prose--wide home">
     <section class="hero">
-      <h1>Java, all the way down</h1>
-      <p class="hero__lede">Every code sample on this site compiles and runs in your browser. Every idea that usually gets waved at &mdash; what the JVM actually does, why generics forget their types, what a stream is really doing &mdash; comes with a program you can change, and problems that check your answer by running it.</p>
+      <h1>Physics you can run</h1>
+      <p class="hero__lede">Every closed-form result on this site has been checked against a numerical integration of the same equation of motion before you read it &mdash; and then handed to you with sliders, so you can drag a parameter and watch the formula hold, or watch it fail. Mechanics and E&amp;M, the calculus-based course, with the calculus left in.</p>
       <div class="hero__actions">
         <a class="button button--primary" href="${startHref}">Start at the beginning</a>
         <a class="button" href="${url('practice/')}">Jump to problems</a>
@@ -65,18 +65,18 @@ export function renderHome(book: Book, assets: Assets): string {
       <h2>Three ways to read this</h2>
       <div class="paths__grid">
         <div class="path">
-          <h3>New to programming</h3>
-          <p>Read the early parts in order. They assume nothing: no JDK installed, no terminal experience, no maths beyond arithmetic.</p>
+          <h3>Taking Mechanics</h3>
+          <p>Units 1 to 7, in order. It assumes you are taking calculus alongside, not that you have finished it &mdash; where a technique is needed, there is a sentence and a link across to the calculus book.</p>
           <a href="${startHref}">Begin &rarr;</a>
         </div>
         <div class="path">
-          <h3>You know another language</h3>
-          <p>Skim the first part, then slow down where Java stops behaving like what you already know: references and equality, checked exceptions, and generics that are erased before they run.</p>
+          <h3>Taking E&amp;M</h3>
+          <p>Units 8 to 13, a separate exam with its own paper. It leans on Mechanics for energy and momentum, and on integration far more heavily than Mechanics does.</p>
           <a href="${secondHref}">Skip ahead &rarr;</a>
         </div>
         <div class="path">
           <h3>You want the problems</h3>
-          <p>The problem bank is filterable by topic and difficulty, and each problem compiles and tests your submission. Your progress is saved in this browser.</p>
+          <p>Answers are graded symbolically, so a result in terms of <em>g</em> and <em>h</em> is marked on what it means rather than how you spelled it. Your progress is saved in this browser.</p>
           <a href="${url('practice/')}">Open the bank &rarr;</a>
         </div>
       </div>
@@ -89,9 +89,9 @@ export function renderHome(book: Book, assets: Assets): string {
   </article>`;
 
   return shell({
-    title: `${book.title} — an interactive Java book`,
+    title: `${book.title} — an interactive, simulation-checked physics book`,
     description:
-      'An interactive Java textbook: runnable examples, diagrams of what the JVM is doing, and auto-graded practice problems, from first program to generics and concurrency.',
+      'An interactive AP Physics C textbook, Mechanics and E&M: every result checked against a numerical integration, simulations you can drag, and practice graded by meaning rather than by spelling.',
     main,
     book,
     assets,
@@ -153,7 +153,7 @@ export function renderPractice(book: Book, assets: Assets): string {
 
   return shell({
     title: `Practice problems · ${book.title}`,
-    description: 'Auto-graded Java practice problems, filterable by topic and difficulty.',
+    description: 'Auto-graded physics practice, filterable by topic and difficulty.',
     main,
     book,
     assets,
@@ -169,7 +169,7 @@ export function renderExercisePage(book: Book, exercise: Exercise, assets: Asset
 
   return shell({
     title: `${exercise.title} · Practice · ${book.title}`,
-    description: `Java practice problem: ${exercise.title}`,
+    description: `Physics C practice problem: ${exercise.title}`,
     main,
     book,
     assets,
