@@ -23,10 +23,20 @@ const expected: string[] = [];
 let inBlock = false;
 let expecting = '';
 let positive: string[] = [];
+let symbols: string[] = [];
 
 for (let i = 0; i < lines.length; ++i) {
   const line = lines[i];
-  if (/^```math\s+verify\s*$/.test(line.trim())) { inBlock = true; positive = []; continue; }
+  if (/^```math\s+verify\s*$/.test(line.trim())) {
+    inBlock = true;
+    positive = [];
+    symbols = [];
+    // Reset the expectation too. It used to persist across blocks, so a block
+    // that forgot its `# expect:` line silently inherited the previous one —
+    // and a fixture asserting the wrong thing is worse than no fixture.
+    expecting = '';
+    continue;
+  }
   if (inBlock && line.trim().startsWith('```')) { inBlock = false; continue; }
   if (!inBlock) continue;
 
@@ -45,6 +55,12 @@ for (let i = 0; i < lines.length; ++i) {
     continue;
   }
 
+  const declare = line.match(/^\s*#\s*symbols:\s*(.+)$/);
+  if (declare) {
+    symbols = declare[1].split(/[\s,]+/).filter((n) => /^[A-Za-z_]\w*$/.test(n));
+    continue;
+  }
+
   const text = line.split('#')[0].trim();
   if (!text) continue;
 
@@ -53,7 +69,15 @@ for (let i = 0; i < lines.length; ++i) {
     console.log(`  FAIL fixture:${i + 1}  ${text}\n       did not parse: ${parsed}`);
     process.exit(1);
   }
-  claims.push(positive.length > 0 ? { ...parsed, positive } : parsed);
+  if (!expecting) {
+    console.log(`  FAIL fixture:${i + 1}  ${text}\n       this block has no \`# expect:\` line`);
+    process.exit(1);
+  }
+  claims.push({
+    ...parsed,
+    ...(positive.length > 0 ? { positive } : {}),
+    ...(symbols.length > 0 ? { symbols } : {}),
+  });
   expected.push(expecting);
 }
 

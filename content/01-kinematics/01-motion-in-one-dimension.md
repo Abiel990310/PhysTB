@@ -74,13 +74,18 @@ Integrating again, since $\tfrac{dx}{dt} = v$:
 $$x(t) = x_0 + v_0 t + \tfrac{1}{2}a t^2$$
 
 ```math verify
-d/dt (v + a*t) = a
-d/dt (b + v*t + a*t**2/2) = a*t + v
+# symbols: v0, x0
+d/dt (v0 + a*t) = a
+d/dt (x0 + v0*t + a*t**2/2) = a*t + v0
 ```
 
 The first verified line says the velocity equation really does have constant
 acceleration $a$; the second says differentiating the position equation returns
 the velocity equation. Those two checks are the derivation.
+
+The `# symbols:` line is not decoration. Without it the checker's algebra
+library splits `v0` into $v \times 0$ — the number zero — and would happily
+"prove" a statement about nothing at all.
 
 The third equation, the one without $t$, comes from eliminating $t$ between
 them:
@@ -102,8 +107,9 @@ works; the shortcuts do not.
 :::
 
 ```math verify
+# symbols: v0
 int a dt = a*t
-int (v + a*t) dt = v*t + a*t**2/2
+int (v0 + a*t) dt = v0*t + a*t**2/2
 ```
 
 Those are the two integrations, checked. The constants of integration are

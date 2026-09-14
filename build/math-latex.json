@@ -50,9 +50,9 @@
   "lim t->oo (1 - exp(-b*t)) = 1": "\\lim_{t \\to \\infty}\\left(1 - e^{- b t}\\right) = 1",
   "d/dt (5*t**3 - 2*t**2 + 7) = 15*t**2 - 4*t": "\\frac{d}{d t} \\left(5 t^{3} - 2 t^{2} + 7\\right) = 15 t^{2} - 4 t",
   "d/dt (15*t**2 - 4*t) = 30*t - 4": "\\frac{d}{d t} \\left(15 t^{2} - 4 t\\right) = 30 t - 4",
-  "d/dt (v + a*t) = a": "\\frac{\\partial}{\\partial t} \\left(a t + v\\right) = a",
-  "d/dt (b + v*t + a*t**2/2) = a*t + v": "\\frac{\\partial}{\\partial t} \\left(\\frac{a t^{2}}{2} + b + t v\\right) = a t + v",
+  "d/dt (v0 + a*t) = a": "",
+  "d/dt (x0 + v0*t + a*t**2/2) = a*t + v0": "",
   "int a dt = a*t": "\\int a\\, dt = a t",
-  "int (v + a*t) dt = v*t + a*t**2/2": "\\int \\left(a t + v\\right)\\, dt = \\frac{a t^{2}}{2} + t v",
+  "int (v0 + a*t) dt = v0*t + a*t**2/2": "",
   "d/dt (t**2 - 3*t) = 2*t - 3": "\\frac{d}{d t} \\left(t^{2} - 3 t\\right) = 2 t - 3"
 }

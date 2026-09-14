@@ -63,3 +63,23 @@ d/dQ (Q**2/2) = Q
 E*I = I*E
 d/dt (Q*exp(-t)) = -Q*exp(-t)
 ```
+
+An undeclared subscripted symbol, which must be refused rather than quietly
+dropped. This is the nastiest failure the checker can have: SymPy reads `v0` as
+`v` times `0`, so without the guard the claim below does not fail — it reports
+`ok`, having proved `d/dt (a*t**2/2) = a*t`, which is true and is not what was
+written. A green build for prose nobody checked.
+
+```math verify
+# expect: wrong
+d/dt (x0 + v0*t + a*t**2/2) = a*t + v0
+```
+
+The same claim, with the symbols declared, is the real statement and holds.
+
+```math verify
+# expect: ok
+# symbols: v0, x0
+d/dt (x0 + v0*t + a*t**2/2) = a*t + v0
+int (v0 + a*t) dt = v0*t + a*t**2/2
+```

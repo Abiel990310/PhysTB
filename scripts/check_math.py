@@ -22,6 +22,7 @@ never be reported as verified.
 from __future__ import annotations
 
 import json
+import re
 import random
 import sys
 
@@ -72,6 +73,37 @@ for _name in ("Q", "E", "I", "N", "S", "O"):
     LOCALS[_name] = Symbol(_name)
 
 
+class UndeclaredSymbol(Exception):
+    """A claim used a subscripted name it never declared."""
+
+
+# `v0`, `x0`, `q1`, `R2` — a letter followed by digits. SymPy reads these as a
+# product, so every one of them collapses to zero, and the claim that survives
+# is a different and weaker statement than the one written.
+SUBSCRIPTED = re.compile(r"\b[A-Za-z]+[0-9]+\b")
+
+
+def require_declared(text: str, declared) -> None:
+    """Refuse a claim whose subscripted symbols were never declared.
+
+    This is a guard against a silent pass, which is the only kind of failure
+    that matters here. Written without a `# symbols:` line,
+
+        d/dt (x0 + v0*t + a*t**2/2) = a*t + v0
+
+    does not fail — it reports `ok`, because x0 and v0 both became zero on both
+    sides and what was actually proved was `d/dt (a*t**2/2) = a*t`. A true
+    statement, and not the one in the book. Refusing outright is the only
+    honest answer: the alternative is a green build for prose nobody checked.
+    """
+    missing = sorted({m for m in SUBSCRIPTED.findall(text) if m not in set(declared)})
+    if missing:
+        raise UndeclaredSymbol(
+            f"{', '.join(missing)} would parse as zero. "
+            f"Add `# symbols: {', '.join(missing)}` to the verify block."
+        )
+
+
 def parse(text: str, positive=(), declared=()):
     """
     Parse an expression, optionally with symbols declared positive.
@@ -90,6 +122,7 @@ def parse(text: str, positive=(), declared=()):
     # the number zero. Initial velocity is the commonest symbol in mechanics.
     for name in declared:
         names.setdefault(name, Symbol(name))
+    require_declared(text, names)
     return parse_expr(text, local_dict=names, transformations=TRANSFORMS)
 
 
@@ -171,9 +204,10 @@ def zero_verdict(difference, var):
 def check(claim: dict) -> dict:
     kind = claim["kind"]
     pos = tuple(claim.get("positive") or ())
+    declared = tuple(claim.get("symbols") or ())
 
     def p(text):
-        return parse(text, pos)
+        return parse(text, pos, declared)
 
     try:
         if kind == "deriv":

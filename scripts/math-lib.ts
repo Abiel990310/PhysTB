@@ -37,6 +37,10 @@ export interface Claim {
   to?: string;
   lo?: string;
   hi?: string;
+  /** Symbols the block declares positive, via `# assume: m > 0`. */
+  positive?: string[];
+  /** Multi-character symbols the block declares, via `# symbols: v0, x0`. */
+  symbols?: string[];
 }
 
 export type Verdict = Claim & { status: 'ok' | 'wrong' | 'unproved'; detail: string | null };
@@ -88,10 +92,16 @@ export async function collect(dir = 'content'): Promise<{ claims: Claim[]; bad: 
     const lines = (await readFile(path, 'utf8')).split('\n');
     let inBlock = false;
     let positive: string[] = [];
+    let symbols: string[] = [];
 
     for (let i = 0; i < lines.length; ++i) {
       const line = lines[i];
-      if (/^```math\s+verify\s*$/.test(line.trim())) { inBlock = true; positive = []; continue; }
+      if (/^```math\s+verify\s*$/.test(line.trim())) {
+        inBlock = true;
+        positive = [];
+        symbols = [];
+        continue;
+      }
       if (inBlock && line.trim().startsWith('```')) { inBlock = false; continue; }
       if (!inBlock) continue;
 
@@ -106,12 +116,31 @@ export async function collect(dir = 'content'): Promise<{ claims: Claim[]; bad: 
         continue;
       }
 
+      // "# symbols: v0, x0" keeps those names whole. SymPy splits an unfamiliar
+      // multi-character symbol into single-letter factors, so `v0` would
+      // otherwise parse as v times 0 — the number zero — with no error
+      // anywhere. Physics notation is full of subscripts; this is how a claim
+      // gets to use the same letters the prose does.
+      const declare = line.match(/^\s*#\s*symbols:\s*(.+)$/);
+      if (declare) {
+        symbols = declare[1]
+          .split(/[\s,]+/)
+          .filter((n) => /^[A-Za-z_]\w*$/.test(n));
+        continue;
+      }
+
       const text = line.split('#')[0].trim();       // `#` starts a comment
       if (!text) continue;
 
       const parsed = parseClaim(text, rel, i + 1);
       if (typeof parsed === 'string') bad.push(`${rel}:${i + 1}  ${text}\n         ${parsed}`);
-      else claims.push(positive.length > 0 ? { ...parsed, positive } : parsed);
+      else {
+        claims.push({
+          ...parsed,
+          ...(positive.length > 0 ? { positive } : {}),
+          ...(symbols.length > 0 ? { symbols } : {}),
+        });
+      }
     }
   }
   return { claims, bad };

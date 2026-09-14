@@ -85,8 +85,10 @@ def first_variable(spec: str):
     the first. Plain equivalence needs none: subtracting two expressions and
     simplifying settles it however many symbols they contain.
     """
-    names = [n for n in spec.replace(",", " ").split() if n]
-    return parse(names[0] if names else "x")
+    names = names_in(spec)
+    # Declared to itself: a variable called `v0` must not be parsed as zero
+    # while being read as a variable name.
+    return parse(names[0] if names else "x", declared=names)
 
 
 def grade(item: dict) -> dict:
