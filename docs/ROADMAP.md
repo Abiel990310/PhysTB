@@ -99,15 +99,18 @@ rebuilt**:
 
 | # | Unit | Weight | State |
 |---|---|---|---|
-| 8 | Electric Charges, Fields, and Gauss's Law | 15-25% | done |
+| 8 | Electric Charges, Fields, and Gauss's Law | 15-25% | done — Coulomb/fields and Gauss's law |
 | 9 | Electric Potential | 10-20% | done |
 | 10 | Conductors and Capacitors | 10-15% | done |
 | 11 | Electric Circuits | 15-25% | done |
 | 12 | Magnetic Fields and Electromagnetism | 10-20% | done |
 | 13 | Electromagnetic Induction | 10-20% | done |
 
-Every unit now has at least one chapter. The heavy units — 2, 5, 8 and 11 — are
-where a second chapter is worth more than a first chapter anywhere else.
+Every unit has at least one chapter; units 2 and 8 have two. The heavy units
+still on one are **5** (Torque and Rotational Dynamics, 20-25%) and **11**
+(Electric Circuits, 15-25%) — and 11 is the larger gap, because its only chapter
+is RC circuits, so resistor networks, EMF and internal resistance, and power
+dissipation are not covered at all.
 
 ## Rules specific to this book
 
