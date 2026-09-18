@@ -3,7 +3,7 @@
 An interactive **AP Physics C** textbook — Mechanics and E&M — in the same
 family as CppTB, JavaTB, CsaTB and CalTB.
 
-**Fifteen chapters written, 86 claims, 2 simulation checks and 12 graded
+**Sixteen chapters written, 93 claims, 2 simulation checks and 16 graded
 problems.** **Every one of the thirteen units has at least one chapter**, after
 the CED check found the structure had been written against the pre-2024 course.
 The engine, KaTeX, the graph widget and the answer grader came across from
