@@ -87,6 +87,24 @@ await page.locator('.sim__slider').first().evaluate((el) => {
 await page.waitForTimeout(250);
 console.log('large angle:', await page.locator('.sim__readout').textContent());
 
+// Verified mathematics must reach the reader typeset, not as SymPy source.
+//
+// `markdown.ts` falls back to a <code> block when the LaTeX cache has no entry
+// for a claim, which keeps the page honest but hands the reader raw source —
+// the plain-text-equation failure this book exists to avoid. Five equations,
+// the kinematics ones among them, shipped that way for months. The build now
+// refuses to emit an unrenderable claim; this is the browser-level check that
+// a stale or missing cache cannot bring the fallback back silently.
+await page.goto('http://localhost:4199/kinematics/motion-in-one-dimension/', { waitUntil: 'networkidle' });
+await page.waitForSelector('.proved__row', { timeout: 5000 });
+const rows = await page.locator('.proved__row').count();
+const plain = await page.locator('.proved__row > code').count();
+const typeset = await page.locator('.proved__row .katex').count();
+console.log(`proved rows: ${rows}, typeset ${typeset}, raw source ${plain}`);
+if (plain > 0 || typeset < rows) {
+  errors.push(`${plain} proved claim(s) rendered as raw SymPy source, ${typeset}/${rows} typeset`);
+}
+
 await browser.close();
 server.close();
 

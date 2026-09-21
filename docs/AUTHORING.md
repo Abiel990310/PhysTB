@@ -146,7 +146,20 @@ exercise payload, or the build plumbing:
 npm run build && node scripts/smoke-browser.mjs
 ```
 
-Set `PW_CHROMIUM` to a browser binary if Playwright cannot find its own.
+Set `PW_CHROMIUM` to a browser binary if Playwright cannot find its own. It
+usually cannot: the pinned Playwright asks for a build number the preinstalled
+browser does not have, and the error it prints tells you to download one rather
+than to point at the one already there.
+
+```bash
+PW_CHROMIUM=$(ls -d /opt/pw-browsers/chromium-*/chrome-linux/chrome | head -1) \
+  node scripts/smoke-browser.mjs
+```
+
+It checks the mathematics reaches the reader typeset, too. A claim whose LaTeX
+is missing from the cache falls back to raw SymPy source — correct, and the
+plain-text-equation failure this book exists to avoid — so the smoke test fails
+on any `.proved__row` that rendered as `<code>`.
 
 ## Structure
 

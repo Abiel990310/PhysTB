@@ -80,6 +80,17 @@ rebuilt**:
       specific, common, gradeable mistake and deserves its own message, not to
       be folded into "wrong".
 - [ ] **Rubric-point scoring** for free response, as in the sibling books.
+- [x] **Proved equations reach the reader typeset.** Done 2026-09-21, and it
+      had been broken since the `# symbols:` guard landed. `latex_math.py`
+      parsed each claim *without* the declarations `check_math.py` parsed it
+      with, so every block carrying `# symbols:` or `# assume:` failed to
+      render and fell back to raw SymPy source — five equations on the live
+      site, the two kinematics ones among them. The fallback itself is
+      correct and stays; what was missing was anything that objected. Two
+      gates now do: `math:latex` exits non-zero on a claim it cannot typeset
+      and runs inside `verify`, and the browser smoke test fails if any
+      `.proved__row` renders as `<code>`. Both were confirmed to fail before
+      they were kept.
 
 ## Provisional structure
 
@@ -109,7 +120,21 @@ rebuilt**:
 Every unit has at least one chapter; units 2, 8 and 11 have two. The heaviest
 unit still on a single chapter is **5**, Torque and Rotational Dynamics at
 20-25% — it covers rotational kinematics, moment of inertia and torque in one
-go, so a second chapter on rolling and statics would earn its place.
+go, so a second chapter on rolling and statics is the clear next item here.
+
+That chapter has more room than it used to. On 2026-09-21, 5.1 and 6.1 were
+found to **overlap**: both taught $L = I\omega$ and its conservation, both used
+the spinning skater, and both ended on a near-identical sphere-against-hoop
+rolling race. 6.1 was the later chapter and the overlap was introduced with it.
+
+The fix followed the CED's own split rather than adding a chapter — unit 5 is
+torque and rotational *dynamics*, unit 6 is energy and momentum of rotating
+systems — so 5.1 now stops at $\tau = I\alpha$ and the moments of inertia it
+needs, and points forward. Its freed section became a parallel-axis question,
+which 5.1 had been stating and verifying without ever asking about.
+
+A duplicate is worth looking for whenever two units share a vocabulary. Nothing
+in the verifier can see one: both chapters were green.
 
 ## Rules specific to this book
 

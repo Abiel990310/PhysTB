@@ -23,11 +23,23 @@ import sys
 
 from sympy import Derivative, Integral, Limit, Sum, Eq, latex, oo
 
-from check_math import parse, LOCALS
+from check_math import parse as _parse
 
 
 def render(claim: dict) -> str:
     kind = claim["kind"]
+    # The same declarations the checker parsed with. Without them a block
+    # carrying `# symbols: R1, R2` parses here as the undeclared names the
+    # guard refuses, the render fails, and the reader gets raw SymPy source
+    # for an equation the build proved — the one outcome this file exists to
+    # prevent. `positive` matters for the same reason: sqrt(d**2*k/m) prints
+    # differently once d is known to be positive.
+    pos = tuple(claim.get("positive") or ())
+    declared = tuple(claim.get("symbols") or ())
+
+    def parse(text):
+        return _parse(text, pos, declared)
+
     lhs = parse(claim["lhs"])
     rhs = parse(claim["rhs"])
 

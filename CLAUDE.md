@@ -4,7 +4,7 @@ An interactive **AP Physics C** textbook — Mechanics and E&M — in the same
 family as CppTB, JavaTB, CsaTB and CalTB.
 
 **Sixteen chapters written, 93 claims, 2 simulation checks and 16 graded
-problems.** **Every one of the thirteen units has at least one chapter**, after
+problems**, all 91 distinct claims typeset for the reader. **Every one of the thirteen units has at least one chapter**, after
 the CED check found the structure had been written against the pre-2024 course.
 The engine, KaTeX, the graph widget and the answer grader came across from
 CalTB; the simulation widget is this book's own.
@@ -36,6 +36,16 @@ SymPy reads `^` as a bitwise XOR unless told otherwise, so `a*t^2/2` parses
 cleanly and means something else; and it splits any undeclared multi-character
 symbol into single letters, which turns **`v0` into the number zero**. Initial
 velocity is the commonest symbol in mechanics. Declare the names.
+
+The declarations have to reach **every** parse, which is a thing worth checking
+when one is added. `latex_math.py` typesets the claims for the page and was
+parsing them without the declarations the checker used, so every block carrying
+`# symbols:` or `# assume:` silently fell back to raw SymPy source — five
+equations on the live site, including both kinematics ones. Nothing failed,
+because the fallback is *correct*; it is just the plain-text-equation failure
+this book exists to avoid. Anything that parses a claim must parse it the way
+`check(...)` does, or the page can show one equation while the build proved
+another.
 
 Readers get that machine too, not just its verdict. `<tb-sim>` hands them the
 equation of motion with sliders, draws the numerical solution, and — where a
