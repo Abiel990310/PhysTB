@@ -8,7 +8,7 @@ objectives:
   - Translate between linear and rotational quantities
   - Compute a moment of inertia, including by integration
   - Apply the rotational form of Newton's second law
-  - Use conservation of angular momentum
+  - Use the parallel axis theorem to change axes
 scope: mech
 status: complete
 standard: none
@@ -123,41 +123,40 @@ big one to win, and neither does — only the *distribution* of mass matters,
 through the dimensionless coefficient in $I = cMR^2$.
 :::
 
-## Angular momentum
+## What comes next
 
-$$L = I\omega$$
+Angular momentum, rotational kinetic energy and their conservation laws are
+unit 6's subject — chapter 6.1 takes them up, and this chapter's $I$ is exactly
+what they are built on.
 
-and it is conserved when no external torque acts. This is the rotational twin of
-chapter 4, and it explains the spinning skater: pulling the arms in reduces $I$,
-so $\omega$ must rise to keep $L$ fixed.
-
-Note what is *not* conserved there. Kinetic energy $\tfrac12 I\omega^2$ goes up,
-because the skater does work pulling against the outward pull of their own arms.
-Conservation of one quantity never implies conservation of another.
+The division follows the course itself: unit 5 is **torque and rotational
+dynamics**, which is $\tau = I\alpha$ and the moments of inertia it needs. Unit
+6 is **energy and momentum of rotating systems**, which is units 3 and 4 with
+the rotational substitutions.
 
 :::quiz
 {
-  "question": "A solid sphere and a hoop, same mass and radius, roll from rest down the same incline. Which reaches the bottom first?",
+  "question": "A uniform rod is pivoted at one end rather than at its centre. The same torque is applied. How does its angular acceleration compare?",
   "options": [
     {
-      "text": "The sphere, because less of its energy goes into rotation",
+      "text": "Four times smaller, because I is four times larger about the end",
       "correct": true,
-      "why": "I = (2/5)MR² for the sphere against MR² for the hoop. Both start with the same Mgh, and the hoop diverts more of it into spin, leaving less for translation. Mass and radius cancel out entirely."
+      "why": "I is ML²/12 about the centre and ML²/3 about the end — a factor of four, which the parallel axis theorem gives as ML²/12 + M(L/2)². With τ = Iα and τ fixed, α is inversely proportional to I."
     },
     {
-      "text": "They tie, since they have the same mass and start from the same height",
+      "text": "Unchanged, since the torque and the rod's mass are the same",
       "correct": false,
-      "why": "Same energy available, but split differently. The split is set by the mass distribution, which is exactly what differs here."
+      "why": "τ = Iα has three quantities in it, and moving the axis changes I. Mass alone does not determine the resistance to angular acceleration — its distribution about the chosen axis does."
     },
     {
-      "text": "The hoop, because its mass is further out and carries more momentum",
+      "text": "Four times larger, because the end is further from the centre of mass",
       "correct": false,
-      "why": "Mass further out means a larger moment of inertia, which makes it harder to spin up, not easier to move. The hoop finishes last."
+      "why": "Distance from the axis raises I, and a larger I means a smaller α for the same torque. The direction is inverted here: harder to spin up, not easier."
     },
     {
-      "text": "It depends on the incline angle",
+      "text": "Twice as small, since the end is L/2 from the centre",
       "correct": false,
-      "why": "The angle changes how long both take, but not the order. The energy split depends only on the I = cMR² coefficient, which the angle does not touch."
+      "why": "The shift distance is L/2, but the parallel axis theorem adds Md², and d is squared. That squaring is what turns a factor of two in distance into a factor of four in the result."
     }
   ]
 }
@@ -172,8 +171,8 @@ Conservation of one quantity never implies conservation of another.
   meaningless without one. The parallel axis theorem relates them and checks
   your work.
 - Only the perpendicular force component makes torque: $\tau = rF\sin\theta$.
-- Rolling splits energy between translation and rotation, with $v = R\omega$.
-  Mass and radius cancel; only the distribution decides the race.
-- $L = I\omega$ is conserved without external torque — but kinetic energy need
-  not be.
+- Rolling without slipping ties $v$ to $\omega$ by $v = R\omega$; that
+  constraint is what makes the two motions one problem.
+- Angular momentum and rotational energy are unit 6, built on the $I$ defined
+  here.
 :::
